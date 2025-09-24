@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CraveGlaze</title>
+</head>
+<body>
+    <header>
+        <h1><a href="{% url 'products:product_list' %}">CraveGlaze</a></h1>
+        <nav>
+            <a href="{% url 'cart:cart_detail' %}">View Cart</a>
+        </nav>
+        <hr>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <hr>
+        <p>&copy; 2025 CraveGlaze</p>
+    </footer>
+</body>
+</html>

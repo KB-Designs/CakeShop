@@ -1,0 +1,70 @@
+{% extends "products/base.html" %}
+{% block content %}
+<h1>{{ product.name }}</h1>
+
+{% if product.image %}
+  <img src="{{ product.image.url }}" alt="{{ product.name }}" width="300">
+{% endif %}
+
+<p>{{ product.description }}</p>
+
+<form action="{% url 'cart:cart_add' product.id %}" method="post" id="cakeForm">
+  {% csrf_token %}
+
+  <!-- Size -->
+  {% if product.sizes %}
+    <label for="size">Size:</label>
+    <select name="size" id="size" onchange="updatePrice()">
+      {% for size, price in product.sizes.items %}
+        <option value="{{ size }}" data-price="{{ price }}">{{ size }} - Ksh {{ price }}</option>
+      {% endfor %}
+    </select><br><br>
+  {% endif %}
+
+  <!-- Icing -->
+  {% if product.icings %}
+    <label for="icing">Icing:</label>
+    <select name="icing" id="icing">
+      {% for icing in product.icings %}
+        <option value="{{ icing }}">{{ icing }}</option>
+      {% endfor %}
+    </select><br><br>
+  {% endif %}
+
+  <!-- Eggs -->
+  {% if product.egg_options %}
+    <label for="eggs">Egg Option:</label>
+    <select name="eggs" id="eggs">
+      {% for egg in product.egg_options %}
+        <option value="{{ egg }}">{{ egg }}</option>
+      {% endfor %}
+    </select><br><br>
+  {% endif %}
+
+  <!-- Message -->
+  <label for="message_on_cake">Message on Cake:</label>
+  <textarea name="message_on_cake" id="message_on_cake"></textarea><br><br>
+
+  <!-- Quantity -->
+  <label for="quantity">Quantity:</label>
+  <input type="number" name="quantity" value="1" min="1" onchange="updatePrice()"><br><br>
+
+  <!-- Price -->
+  <p><strong>Total Price: Ksh <span id="totalPrice">
+      {% if product.sizes %}{{ product.sizes|first|last }}{% else %}{{ product.price }}{% endif %}
+  </span></strong></p>
+
+  <button type="submit">Add to Cart</button>
+</form>
+
+<script>
+function updatePrice() {
+    let sizeSelect = document.getElementById("size");
+    let selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+    let basePrice = parseInt(selectedOption.getAttribute("data-price"));
+    let quantity = parseInt(document.querySelector("input[name='quantity']").value);
+    document.getElementById("totalPrice").innerText = basePrice * quantity;
+}
+document.querySelector("input[name='quantity']").addEventListener("input", updatePrice);
+</script>
+{% endblock %}

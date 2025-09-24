@@ -1,0 +1,7 @@
+{% extends "products/base.html" %}
+{% block content %}
+<h1>Thank you for your order!</h1>
+<p>Your order number is <strong>{{ order.id }}</strong>.</p>
+<p>We will contact you shortly at {{ order.phone }} or {{ order.email }}.</p>
+<a href="{% url 'products:product_list' %}">Continue Shopping</a>
+{% endblock %}
